@@ -33,6 +33,7 @@ const WinningNumbers: React.FC<WinningNumbersProps> = ({
 
   return (
     <Flex justifyContent="space-between" {...containerProps}>
+      
       {numAsArray.map((num, index) => {
         return (
           <BallWithNumber

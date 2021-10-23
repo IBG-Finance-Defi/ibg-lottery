@@ -48,7 +48,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
 
   const isWinner = result === Result.WIN
 
-  // Winners get the payout, otherwise the claim what they put it if it was canceled
+  //  get the payout, otherwise the claim what they put it if it was canceled
   const payout = isWinner ? getNetPayout(bet, REWARD_RATE) : bet.amount
   const totalPayout = multiplyPriceByAmount(bnbBusdPrice, payout)
   const returned = payout + bet.amount

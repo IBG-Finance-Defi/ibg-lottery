@@ -41,6 +41,7 @@ const StepContainer = styled(Flex)`
 
 const StyledStepCard = styled(Box)`
   display: flex;
+  min-height: 18rem;
   align-self: baseline;
   position: relative;
   background: ${({ theme }) => theme.colors.cardBorder};
@@ -60,14 +61,14 @@ type Step = { title: string; subtitle: string; label: string }
 const StepCard: React.FC<{ step: Step }> = ({ step }) => {
   return (
     <StyledStepCard width="100%">
-      <StepCardInner height={['200px', '180px', null, '200px']}>
+      <StepCardInner>
         <Text mb="16px" fontSize="12px" bold textAlign="right" textTransform="uppercase">
           {step.label}
         </Text>
-        <Heading mb="16px" scale="lg" color="secondary">
+        <Heading mb="16px" scale="lg" color="red">
           {step.title}
         </Heading>
-        <Text color="textSubtle">{step.subtitle}</Text>
+        <Text >{step.subtitle}</Text>
       </StepCardInner>
     </StyledStepCard>
   )
@@ -147,6 +148,11 @@ const AllocationColorCircle = styled.div<{ color: string }>`
   background-color: ${({ color }) => color};
 `
 
+const Div = styled.div`
+  margin-top: 2rem;
+  text-align: center;
+`
+
 const AllocationMatch: React.FC<{ color: string; text: string }> = ({ color, text }) => {
   return (
     <Flex alignItems="center">
@@ -218,55 +224,40 @@ const HowToPlay: React.FC = () => {
     {
       label: t('Step %number%', { number: 1 }),
       title: t('Buy Tickets'),
-      subtitle: t('Prices are set when the round starts, equal to 5 USD in IBG per ticket.'),
+      subtitle: t('Buy a standard lottery ticket for 5 iBGs. Enjoy discount with bulk purchase. (Superstakers can claim 1 fee ticket for every 1000 iBG tokens superstaked) '),
     },
     {
       label: t('Step %number%', { number: 2 }),
       title: t('Wait for the Draw'),
-      subtitle: t('There are two draws every day: one every 12 hours.'),
+      subtitle: t('There will be one drawndown every sunday 7pm GMT +B (10th, 17th, 24th & 31st October)'),
     },
     {
       label: t('Step %number%', { number: 3 }),
-      title: t('Check for Prizes'),
-      subtitle: t('Once the round’s over, come back to the page and check to see if you’ve won!'),
+      title: t('Winner Announcement'),
+      subtitle: t('After each drawndown, Winner will be automatically dropped prize tokens and announced in the dashboard'),
     },
     {
       label: t('Step %number%', { number: 4 }),
-      title: t('Check for Prizes'),
-      subtitle: t('Once the round’s over, come back to the page and check to see if you’ve won!'),
+      title: t('Repeat'),
+      subtitle: t('The smart contract automatically resets and restarts next draw and repeats 1-3 without intervention'),
     },
   ]
   return (
     <Box width="100%">
-      <Flex mb="40px" alignItems="center" flexDirection="column">
-        <Heading mb="24px" scale="xl" color="red">
-          {t('How to Play')}
-        </Heading>
-        <Text textAlign="center">
-          {t(
-            'If the digits on your tickets match the winning numbers in the correct order, you win a portion of the prize pool.',
-          )}
-        </Text>
-        <Text>{t('Simple!')}</Text>
-      </Flex>
-      <StepContainer>
-        {steps.map((step) => (
-          <StepCard key={step.label} step={step} />
-        ))}
-      </StepContainer>
-      <Divider />
-      <GappedFlex flexDirection={['column', 'column', 'column', 'row']}>
+
+
+<GappedFlex flexDirection={['column', 'column', 'column', 'row']}>
         <Flex flex="2" style={{textAlign:"center"}} flexDirection="column" justifyContent="center">
-          <Heading mb="24px" scale="lg" color="red">
-            {t('Winning Criteria')}
+          <Heading mb="36px" scale="xl" color="red">
+            {t('About iBG Lottery')}
           </Heading>
-          <Heading mb="24px" scale="md">
+          {/* <Heading mb="24px" scale="md">
             {t('The digits on your ticket must match in the correct order to win.')}
-          </Heading>
-          <Text mb="16px" color="textSubtle">
-            {t('Here’s an example lottery draw, with two tickets, A and B.')}
+          </Heading> */}
+          <Text mb="6px" >
+            {t('There is an exclusive lottery for october 2021(on BSC only)')}
           </Text>
-          <BulletList>
+          {/* <BulletList>
             <li>
               <Text display="inline" color="textSubtle">
                 {t(
@@ -275,16 +266,38 @@ const HowToPlay: React.FC = () => {
               </Text>
             </li>
             <li>
-              <Text display="inline" color="textSubtle">
+              <Text display="inlbackground: #7E41D6;
+background: -webkit-linear-gradient(top, #7E41D6, #59179E);
+background: -moz-linear-gradient(top, #7E41D6, #59179E);
+background: linear-gradient(to bottom, #7E41D6, #59179E);ine" color="textSubtle">
                 {t(
                   'Ticket B: Even though the last 5 digits match, the first digit is wrong, so this ticket doesn’t win a prize.',
                 )}
               </Text>
             </li>
-          </BulletList>
-          <Text mt="16px" color="textSubtle">
+          </BulletList> */}
+          <Text mt="16px"  >
+            
+            <span style={{color:"red"}}>4 Draws</span>  Lottery cycle starts every sunday at 7pm.
+            
+          </Text>
+          <Text mt="16px" >
+          <span style={{color:"red"}}>2 Winners</span> The drawndown of winners will be every Sunday 7pm GMT+E (10th 17th 24th & 31st Oct)
+            
+          </Text>
+          <Text mt="16px" >
+           
+          <span style={{color:"red"}}>10 000 iBG Prize.</span> Each Winner randomly picked via smart contract logic will win 5K each
+           
+          </Text>
+          <Text mt="16px" >
             {t(
-              'Prize brackets don’t ‘stack’: if you match the first 3 digits in order, you’ll only win prizes from the ‘Match 3’ bracket, and not from ‘Match 1’ and ‘Match 2’.',
+              'The lottery is fully manged by a smart contract that allows anyone check the address.'
+            )}
+          </Text>
+          <Text mt="16px" >
+            {t(
+              '100% of subscription proceeds burned(no fees to the company nor the developer) '
             )}
           </Text>
         </Flex>
@@ -292,6 +305,32 @@ const HowToPlay: React.FC = () => {
           <MatchExampleCard />
         </Flex> */}
       </GappedFlex>
+
+      <Divider />
+
+      <Flex mb="40px" alignItems="center" flexDirection="column">
+        <Heading mb="24px" scale="xl" color="red">
+          {t('How it works')}
+        </Heading>
+        {/* <Text textAlign="center">
+          {t(
+            'If the digits on your tickets match the winning numbers in the correct order, you win a portion of the prize pool.',
+          )}
+        </Text> */}
+        {/* <Text>{t('Simple!')}</Text> */}
+      </Flex>
+      <StepContainer>
+        {steps.map((step) => (
+          <StepCard key={step.label} step={step} />
+        ))}
+      </StepContainer>
+      
+      <Div>
+      <Heading mb="18px" style={{marginTop:"2rem"}} scale="xl" color="red" >Standing together as united ecosystem</Heading>
+      <Text>All proceeeds are burned immediately upon purchase of tickets (No developer fees kept)</Text>
+      <Text>Prize Tokens from the redistribution of a part of the non native farms yield. (This will benefits our whole ecosystem by bringing more holders and </Text>
+        <Text>decrease the daily sell pressure of non native farmers</Text>
+      </Div>
       {/* <Divider />
       <GappedFlex flexDirection={['column', 'column', 'column', 'row']}>
         <Flex flex="2" flexDirection="column">

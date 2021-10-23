@@ -38,9 +38,13 @@ const Grid = styled.div`
 
 const StepContainer = styled(Flex)`
   gap: 24px;
-  margin-top:12px;
-  width: 100px;
+  margin-top: 24px;
+  width: 100%;
+  justify-content: space-between;
   flex-direction: column;
+  align-items: center;
+  // background-color: #fef0ff;
+  // padding: 1rem;
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: row;
   }
@@ -68,13 +72,71 @@ const StyledCard = styled(Card)`
   }
 
   ${({ theme }) => theme.mediaQueries.md} {
-    width: 956px;
+    width: 1200px;
   }
 `
 
 const NextDrawWrapper = styled.div`
   background: ${({ theme }) => theme.colors.background};
   padding: 24px;
+`
+
+const H = styled.h2`
+    color: #000080;
+    font-weight:550;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    @media only screen and (max-width: 600px) {
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+`;
+
+const T = styled.p`
+    color: #000080;
+    font-weight: regular;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    @media only screen and (max-width: 600px) {
+        font-weight: regular;
+        font-size: 1rem;
+    }
+`;
+
+const Left = styled.div`
+     display: grid;
+      place-items: center;
+     @media only screen and (max-width: 600px) {
+        
+     }
+`;
+
+const Right = styled.div`
+      display: grid;
+      place-items: center;
+      @media only screen and (max-width: 600px) {
+        margin-top: 1.5rem;
+      }
+`;
+
+const Flexx = styled(Flex)`
+      width: 100%;
+      align-items: center;
+      justify-content: space-around;
+      background-color: rgb(248, 239, 242);
+      border-radius: .5rem;
+      padding: 1rem ;
+      flex-direction: column;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      flex-direction: row;
+  }
+`;
+
+const Foot = styled(CardFooter)`
+  display: grid;
+  place-items: center;
+  padding: 1rem ;
 `
 
 const NextDrawCard = () => {
@@ -168,7 +230,7 @@ const NextDrawCard = () => {
         </Flex>
       </CardHeader>
       <CardBody>
-        <Grid>
+        {/* <Grid>
           <Flex justifyContent={['center', null, null, 'flex-start']}>
             <Heading>{t('Prize Pot')}</Heading>
           </Flex>
@@ -215,15 +277,29 @@ const NextDrawCard = () => {
             <BuyTicketsButton disabled={ticketBuyIsDisabled} maxWidth="280px" />
           </Flex>
 
-        </Grid>
+        </Grid> */}
+
+        <Flexx>
+          <Left>
+            <H>Prizes</H>
+            <Flex><T>Winner 1:</T><T style={{marginLeft:"1rem"}} >5000 iBG</T></Flex>
+            <Flex><T>Winner 2:</T><T style={{marginLeft:"0.8rem"}}>5000 iBG</T></Flex>
+          </Left>
+          <Right>
+            <H>Current Lottery Information</H>
+            <Flex><T>Ticket Solds:</T><T>5000 Tickets</T></Flex>
+            <Flex><T>Sales proceeds:</T><T>200 Sales</T></Flex>
+            <Flex><T style={{textAlign:"center"}}>Number of Participents 50000 Participants</T></Flex>
+          </Right>
+        </Flexx>
 
 
         <StepContainer>
-          <Card style={{ minWidth: "200px" }}>
-            <CardHeader style={{ background: "red", color: "white", textAlign: "center" }}>
+          <Card style={{ minWidth: "250px" }}>
+            <CardHeader style={{ background: "red", color: "white", textAlign: "center",fontWeight:"bold" }}>
               Buy 1 Ticket
             </CardHeader>
-            <CardBody style={{ textAlign: "center" }}>
+            <CardBody style={{ textAlign: "center", background:"rgb(248, 239, 242)" }}>
               <Text>
                 5 IBG
               </Text>
@@ -232,11 +308,11 @@ const NextDrawCard = () => {
             </CardBody>
           </Card>
 
-          <Card style={{ minWidth: "200px" }}>
-            <CardHeader style={{ background: "red", color: "white", textAlign: "center" }}>
+          <Card style={{ minWidth: "250px" }}>
+            <CardHeader style={{ background: "red", color: "white", textAlign: "center",fontWeight:"bold" }}>
               Buy 10 Ticket
             </CardHeader>
-            <CardBody style={{ textAlign: "center" }}>
+            <CardBody style={{ textAlign: "center" , background:"rgb(248, 239, 242)"}}>
               <Text>
                 45 IBG
               </Text>
@@ -245,11 +321,11 @@ const NextDrawCard = () => {
             </CardBody>
           </Card>
 
-          <Card style={{ minWidth: "200px" }}>
-            <CardHeader style={{ background: "red", color: "white", textAlign: "center" }}>
+          <Card style={{ minWidth: "250px" }}>
+            <CardHeader style={{ background: "red", color: "white", textAlign: "center" ,fontWeight:"bold"}}>
               Buy 100 Ticket
             </CardHeader>
-            <CardBody style={{ textAlign: "center" }}>
+            <CardBody style={{ textAlign: "center", background:"rgb(248, 239, 242)" }}>
               <Text>
                 400 IBG
               </Text>
@@ -257,11 +333,11 @@ const NextDrawCard = () => {
 
             </CardBody>
           </Card>
-          <Card style={{ minWidth: "200px" }}>
-            <CardHeader style={{ background: "red", color: "white", textAlign: "center" }}>
+          <Card style={{ minWidth: "250px" }}>
+            <CardHeader style={{ background: "red", color: "white", textAlign: "center",fontWeight:"bold" }}>
               Buy 1000 Ticket
             </CardHeader>
-            <CardBody style={{ textAlign: "center" }}>
+            <CardBody style={{ textAlign: "center", background:"rgb(248, 239, 242)" }}>
               <Text>
                 4000 IBG
               </Text>
@@ -272,8 +348,11 @@ const NextDrawCard = () => {
         </StepContainer>
 
       </CardBody>
-      <CardFooter p="0">
-        {isExpanded && (
+      <Foot p="0">
+
+        <Text>Clain free ticket only for supertakers, 1 ticket per 1,000 iBG staked in the super taking pools</Text>
+        <Button style={{marginTop:"0.5rem"}}>Claim</Button>
+        {/* {isExpanded && (
           <NextDrawWrapper>
             <RewardBrackets lotteryNodeData={currentRound} />
           </NextDrawWrapper>
@@ -284,8 +363,8 @@ const NextDrawCard = () => {
               {isExpanded ? t('Hide') : t('Details')}
             </ExpandableLabel>
           </Flex>
-        )}
-      </CardFooter>
+        )} */}
+      </Foot>
     </StyledCard>
   )
 }

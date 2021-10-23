@@ -18,7 +18,7 @@ const BuyTicketsButton: React.FC<BuyTicketsButtonProps> = ({ disabled, ...props 
 
   const getBuyButtonText = () => {
     if (status === LotteryStatus.OPEN) {
-      return t('Buy Tickets')
+      return t('Buy')
     }
     return (
       <>
@@ -28,7 +28,7 @@ const BuyTicketsButton: React.FC<BuyTicketsButtonProps> = ({ disabled, ...props 
   }
 
   return (
-    <Button {...props} disabled={disabled} onClick={onPresentBuyTicketsModal} style={{background:"red"}}>
+    <Button {...props} disabled={disabled} onClick={onPresentBuyTicketsModal} style={{background:"red",marginTop:"0.5rem"}}>
       {getBuyButtonText()}
     </Button>
   )

@@ -43,7 +43,7 @@ const Lottery = () => {
   const { numUserRoundsRequested, handleShowMoreUserRounds } = useShowMoreUserHistory()
 
   return (
-    <LotteryPage>
+    <LotteryPage style={{background:"#fff"}}>
       {/* <PageSection style={{background:"#000034"}} background={TITLE_BG} index={1} hasCurvedDivider={false}>
         <Hero />
       </PageSection> */}
@@ -54,7 +54,7 @@ const Lottery = () => {
         clipFill={{ light: '#9e10ea' }}
         dividerPosition="top"
         index={2}
-        style={{background:"#9e10ea"}}
+        style={{background:"linear-gradient(to bottom, #7E41D6, #59179E)"}}
       >
         <Flex alignItems="center" justifyContent="center" flexDirection="column" pt="24px">
           {status === LotteryStatus.OPEN && (
@@ -84,18 +84,18 @@ const Lottery = () => {
         background={isDark ? FINISHED_ROUNDS_BG_DARK : FINISHED_ROUNDS_BG}
         hasCurvedDivider={false}
         index={2}
-        style={{background:"#9A9FD0"}}
+        style={{background:"linear-gradient(to bottom, #83a4d4, #b6fbff)"}}
       >
         <Flex width="100%" flexDirection="column" alignItems="center" justifyContent="center">
-          <Heading color="#7f09c4" mb="24px" scale="xl">
+          <Heading color="#03025f" mb="24px" scale="xl">
             {t('Finished Rounds')}
           </Heading>
-          <Box mb="24px">
+          {/* <Box mb="24px">
             <HistoryTabMenu
               activeIndex={historyTabMenuIndex}
               setActiveIndex={(index) => setHistoryTabMenuIndex(index)}
             />
-          </Box>
+          </Box> */}
           {historyTabMenuIndex === 0 ? (
             <AllHistoryCard />
           ) : (
@@ -109,7 +109,7 @@ const Lottery = () => {
       <PageSection
         dividerPosition="top"
         dividerFill={{ light: theme.colors.background }}
-        clipFill={{ light: '#9A9FD0', dark: '#66578D' }}
+        clipFill={{ light: '#fff', dark: '#66578D' }}
         index={2}
       >
         <HowToPlay />

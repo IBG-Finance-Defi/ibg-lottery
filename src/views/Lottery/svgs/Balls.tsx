@@ -278,6 +278,7 @@ export const BallWithNumber: React.FC<BallWithNumberProps> = ({ color, number, s
   const BallComponent = ballsMap[color]
   return (
     <Flex alignItems="center" justifyContent="center" position="relative" mx="2px">
+   
       <BallComponent width={size ?? '32px'} height={size ?? '32px'} />
       <BallTextWrapper>
         <BallText rotationTransform={rotationTransform} bold fontSize={fontSize ?? '16px'}>

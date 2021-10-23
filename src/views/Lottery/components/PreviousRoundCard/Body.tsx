@@ -25,6 +25,8 @@ const StyledCardBody = styled(CardBody)`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  
 `
 const Grid = styled.div`
   display: grid;
@@ -34,6 +36,7 @@ const Grid = styled.div`
     grid-column-gap: 72px;
     grid-row-gap: 36px;
     grid-template-columns: auto 1fr;
+    margin-left: 1rem;
   }
 `
 
@@ -46,6 +49,47 @@ const StyledCardRibbon = styled(CardRibbon)`
     top: -10px;
   }
 `
+const W1 = styled(Heading)`
+
+  
+  ${({ theme }) => theme.mediaQueries.sm} {
+   
+  }
+`
+const W2 = styled(Heading)`
+ margin: 0rem;
+  ${({ theme }) => theme.mediaQueries.sm} {
+   
+  }
+`
+
+const Mobile = styled.div`
+  display: block;
+  ${({ theme }) => theme.mediaQueries.sm} {
+   display: none;
+  }
+
+`
+const PC = styled.div`
+  display: none;
+  ${({ theme }) => theme.mediaQueries.sm} {
+   display: block;
+  }
+
+`
+const Flexu = styled(Flex)`
+  flex-direction: column;
+  height: auto;
+  margin-top: 4rem;
+  align-items: center;
+  justify-content: space-evenly;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    justify-content: space-around;
+    height: 10rem;
+    margin-top: 3rem;
+   }
+`
+
 
 const PreviousRoundCardBody: React.FC<{ lotteryNodeData: LotteryRound; lotteryId: string }> = ({
   lotteryNodeData,
@@ -78,15 +122,21 @@ const PreviousRoundCardBody: React.FC<{ lotteryNodeData: LotteryRound; lotteryId
   const [youHadText, ticketsThisRoundText] = ticketRoundText.split(totalTicketNumber.toString())
 
   return (
-    <StyledCardBody>
+    <StyledCardBody >
       {isLatestRound && <StyledCardRibbon text={t('Latest')} />}
+      <Flexu flexDirection="column" >
+        <PC><W1  mb="24px">{t('Winner_#1')}</W1></PC><Mobile><W1  mb="24px">{t('#1')}</W1></Mobile>
+        <PC><W2  mb="24px">{t('Winner_#2')}</W2></PC><Mobile><W1  mb="24px">{t('#2')}</W1></Mobile>
+      </Flexu>
       <Grid>
-        <Flex justifyContent={['center', null, null, 'flex-start']}>
-          <Heading mb="24px">{t('Winning Number')}</Heading>
-        </Flex>
-        <Flex maxWidth={['240px', null, null, '100%']} justifyContent={['center', null, null, 'flex-start']}>
+        {/* <Flex justifyContent={['center', null, null, 'flex-start']}> */}
+          
+        {/* </Flex> */}
+        <Flex  maxWidth={['240px', null, null, '100%']} justifyContent={['center', null, null, 'flex-start']}>
+          
           {lotteryNodeData ? (
             <div>
+              <Heading style={{textAlign:"center"}} mb="24px">{t('Winners')}</Heading>
               <WinningNumbers
                 rotateText={isLargerScreen || false}
                 number={lotteryNodeData?.finalNumber.toString()}

@@ -26,13 +26,15 @@ import HowToPlay from './components/HowToPlay'
 import useShowMoreUserHistory from './hooks/useShowMoreUserRounds'
 
 const LotteryPage = styled.div`
-  min-height: calc(100vh - 64px);
+  // min-height: calc(100vh - 64px);
+  height:100vh; to min-height:100vh
 `
 
 const Lottery = () => {
   useFetchLottery()
   useStatusTransitions()
   const { t } = useTranslation()
+  
   const { isDark, theme } = useTheme()
   const {
     currentRound: { status, endTime },
@@ -41,12 +43,11 @@ const Lottery = () => {
   const endTimeAsInt = parseInt(endTime, 10)
   const { nextEventTime, postCountdownText, preCountdownText } = useGetNextLotteryEvent(endTimeAsInt, status)
   const { numUserRoundsRequested, handleShowMoreUserRounds } = useShowMoreUserHistory()
+  const [previousRound, setPreviousRound] = useState([])
 
   return (
-    <LotteryPage style={{background:"#fff"}}>
-      {/* <PageSection style={{background:"#000034"}} background={TITLE_BG} index={1} hasCurvedDivider={false}>
-        <Hero />
-      </PageSection> */}
+    <LotteryPage style={{ background: '#fff' }}>
+    
       <PageSection
         containerProps={{ style: { marginTop: '-30px' } }}
         background={GET_TICKETS_BG}
@@ -54,56 +55,34 @@ const Lottery = () => {
         clipFill={{ light: '#9e10ea' }}
         dividerPosition="top"
         index={2}
-        style={{background:"linear-gradient(to bottom, #7E41D6, #59179E)"}}
+        style={{ background: 'linear-gradient(to bottom, #7E41D6, #59179E)' }}
       >
         <Flex alignItems="center" justifyContent="center" flexDirection="column" pt="24px">
-          {status === LotteryStatus.OPEN && (
-            <Heading scale="xl" color="#fff" mb="24px" textAlign="center">
-              {t('Get your tickets now!')}
-            </Heading>
-          )}
-          <Flex alignItems="center" justifyContent="center" mb="48px">
-            {nextEventTime && (postCountdownText || preCountdownText) ? (
-              <Countdown
-                nextEventTime={nextEventTime}
-                postCountdownText={postCountdownText}
-                preCountdownText={preCountdownText}
-              />
-            ) : (
-              <Skeleton height="41px" width="250px" />
-            )}
-          </Flex>
-          <NextDrawCard />
+         
+          <Heading scale="xl" color="#fff" mb="24px" textAlign="center">
+            {t('Get your tickets now!')}
+          </Heading>
+
+          <NextDrawCard onPreviousRounds={(rounds)=>{
+            setPreviousRound(rounds)
+          }} />
         </Flex>
       </PageSection>
-      {/* <PageSection background={CHECK_PRIZES_BG} hasCurvedDivider={false} index={2} style={{background:"#151515"}}>
-        <CheckPrizesSection />
-      </PageSection> */}
+      
       <PageSection
         innerProps={{ style: { margin: '0', width: '100%' } }}
         background={isDark ? FINISHED_ROUNDS_BG_DARK : FINISHED_ROUNDS_BG}
         hasCurvedDivider={false}
         index={2}
-        style={{background:"linear-gradient(to bottom, #83a4d4, #b6fbff)"}}
+        style={{ background: 'linear-gradient(to bottom, #83a4d4, #b6fbff)' }}
       >
         <Flex width="100%" flexDirection="column" alignItems="center" justifyContent="center">
           <Heading color="#03025f" mb="24px" scale="xl">
-            {t('Finished Rounds')}
+            {t('Last 3 Finished Rounds')}
           </Heading>
-          {/* <Box mb="24px">
-            <HistoryTabMenu
-              activeIndex={historyTabMenuIndex}
-              setActiveIndex={(index) => setHistoryTabMenuIndex(index)}
-            />
-          </Box> */}
-          {historyTabMenuIndex === 0 ? (
-            <AllHistoryCard />
-          ) : (
-            <YourHistoryCard
-              handleShowMoreClick={handleShowMoreUserRounds}
-              numUserRoundsRequested={numUserRoundsRequested}
-            />
-          )}
+          
+
+          <AllHistoryCard  rounds={previousRound}/>
         </Flex>
       </PageSection>
       <PageSection
@@ -112,7 +91,7 @@ const Lottery = () => {
         clipFill={{ light: '#fff', dark: '#66578D' }}
         index={2}
       >
-        <HowToPlay />
+         <HowToPlay />
       </PageSection>
     </LotteryPage>
   )

@@ -1,0 +1,11 @@
+token
+0x5c46c55a699a6359e451b2c99344138420c87261
+https://testnet.bscscan.com/address/0x5c46c55a699a6359e451b2c99344138420c87261#code
+
+Staking Pool
+0x0fBC12a32E2a55A3A37CE88Da09d60DE89c80980
+https://testnet.bscscan.com/address/0x0fBC12a32E2a55A3A37CE88Da09d60DE89c80980#code
+
+
+Lottery 
+0x8d63b1846166B895E9ef7c2E00907c61fEAfC573

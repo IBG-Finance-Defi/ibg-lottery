@@ -1,8 +1,10 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
+import axios from "axios"
+
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { farmsConfig } from 'config/constants'
@@ -10,6 +12,7 @@ import useRefresh from 'hooks/useRefresh'
 import { deserializeToken } from 'state/user/hooks/helpers'
 import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, nonArchivedFarms } from '.'
 import { State, SerializedFarm, DeserializedFarmUserData, DeserializedFarm, DeserializedFarmsState } from '../types'
+import useGetPriceData from './fetchTokenPrice'
 
 const deserializeFarmUserData = (farm: SerializedFarm): DeserializedFarmUserData => {
   return {
@@ -145,13 +148,17 @@ export const useLpTokenPrice = (symbol: string) => {
 // /!\ Deprecated , use the BUSD hook in /hooks
 
 export const usePriceCakeBusd = (): BigNumber => {
-  const cakeBnbFarm = useFarmFromPid(251)
+  const price = useGetPriceData();
+  // axios.get(API_URL).then((re)=>{
+  //   setCakePriceBusd(new BigNumber(re.data.data.price))
+  // });
+  // const cakeBnbFarm = useFarmFromPid(251)
 
-  const cakePriceBusdAsString = cakeBnbFarm.tokenPriceBusd
+  // const cakePriceBusdAsString = cakeBnbFarm.tokenPriceBusd
 
-  const cakePriceBusd = useMemo(() => {
-    return new BigNumber(cakePriceBusdAsString)
-  }, [cakePriceBusdAsString])
+  // const cakePriceBusd = useMemo(() => {
+  //   return new BigNumber(cakePriceBusdAsString)
+  // }, [cakePriceBusdAsString])
 
-  return cakePriceBusd
+  return price
 }

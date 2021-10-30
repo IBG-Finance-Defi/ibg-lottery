@@ -92,8 +92,8 @@ export const useProfile = () => {
 }
 
 export const useLotteryV2Contract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getLotteryV2Contract(library.getSigner()), [library])
+  const { library,account } = useActiveWeb3React()
+  return useMemo(() => getLotteryV2Contract(account?library.getSigner():library), [library,account])
 }
 
 export const useMasterchef = () => {

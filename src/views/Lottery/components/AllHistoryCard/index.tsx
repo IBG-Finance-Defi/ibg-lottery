@@ -25,7 +25,7 @@ const StyledCardHeader = styled(CardHeader)`
   border-bottom: 1px ${({ theme }) => theme.colors.cardBorder} solid;
 `
 
-const AllHistoryCard = () => {
+const AllHistoryCard = ({rounds}) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const {
@@ -40,34 +40,64 @@ const AllHistoryCard = () => {
 
   const numRoundsFetched = lotteriesData?.length
 
-  useEffect(() => {
-    if (currentLotteryId) {
-      const currentLotteryIdAsInt = currentLotteryId ? parseInt(currentLotteryId) : null
-      const mostRecentFinishedRoundId =
-        status === LotteryStatus.CLAIMABLE ? currentLotteryIdAsInt : currentLotteryIdAsInt - 1
-      setLatestRoundId(mostRecentFinishedRoundId)
-      setSelectedRoundId(mostRecentFinishedRoundId.toString())
-    }
-  }, [currentLotteryId, status])
+
+
+  // useEffect(() => {
+  //   if (currentLotteryId) {
+  //     const currentLotteryIdAsInt = currentLotteryId ? parseInt(currentLotteryId) : null
+  //     const mostRecentFinishedRoundId =
+  //       status === LotteryStatus.CLAIMABLE ? currentLotteryIdAsInt : currentLotteryIdAsInt - 1
+  //     setLatestRoundId(mostRecentFinishedRoundId)
+  //     setSelectedRoundId(mostRecentFinishedRoundId.toString())
+  //   }
+  // }, [currentLotteryId, status])
+
 
   useEffect(() => {
-    setSelectedLotteryNodeData(null)
 
-    const fetchLotteryData = async () => {
-      const lotteryData = await fetchLottery(selectedRoundId)
-      const processedLotteryData = processLotteryResponse(lotteryData)
-      setSelectedLotteryNodeData(processedLotteryData)
+    if (rounds.length>0 && !selectedRoundId) {
+      // const currentLotteryIdAsInt = currentLotteryId ? parseInt(currentLotteryId) : null
+      // const mostRecentFinishedRoundId =
+      //   status === LotteryStatus.CLAIMABLE ? currentLotteryIdAsInt : currentLotteryIdAsInt - 1
+      setLatestRoundId(rounds[0].roundNumber)
+      // setSelectedRoundId(mostRecentFinishedR oundId.toString())
+      setSelectedRoundId(rounds[0].roundNumber)
+      setSelectedLotteryNodeData(rounds[0]);
+
     }
+  }, [rounds,selectedRoundId])
 
-    timer.current = setInterval(() => {
-      if (selectedRoundId) {
-        fetchLotteryData()
-      }
-      clearInterval(timer.current)
-    }, 1000)
+  // useEffect(() => {
+  //   setSelectedLotteryNodeData(null)
 
-    return () => clearInterval(timer.current)
-  }, [selectedRoundId, currentLotteryId, numRoundsFetched, dispatch])
+  //   const fetchLotteryData = async () => {
+  //     const lotteryData = await fetchLottery(selectedRoundId)
+  //     const processedLotteryData = processLotteryResponse(lotteryData)
+  //     setSelectedLotteryNodeData(processedLotteryData)
+  //   }
+
+  //   timer.current = setInterval(() => {
+  //     if (selectedRoundId) {
+  //       fetchLotteryData()
+  //     }
+  //     clearInterval(timer.current)
+  //   }, 1000)
+
+  //   return () => clearInterval(timer.current)
+  // }, [selectedRoundId, currentLotteryId, numRoundsFetched, dispatch])
+
+
+  // useEffect(()=>{
+  //   // setSelectedLotteryNodeData
+
+  //  rounds.map((item)=>{
+  //   if(item.roundNumber.toString() === selectedRoundId){
+  //     setSelectedLotteryNodeData(item)
+  //   }
+  //   return null
+  //  })
+  // },[selectedRoundId,rounds])
+
 
   const handleInputChange = (event) => {
     const {
@@ -87,25 +117,37 @@ const AllHistoryCard = () => {
   }
 
   const handleArrowButtonPress = (targetRound) => {
+    const _selectedRoundId = selectedRoundId;
     if (targetRound) {
-      setSelectedRoundId(targetRound.toString())
-    } else {
-      // targetRound is NaN when the input is empty, the only button press that will trigger this func is 'forward one'
-      setSelectedRoundId('1')
-    }
+      let isFound = false
+      rounds.map((item)=>{
+        if(item.roundNumber.toString() === targetRound.toString()){
+          setSelectedLotteryNodeData(item)
+          isFound = true
+        }
+        return null
+       })
+
+       if(!isFound){
+        setSelectedRoundId(_selectedRoundId)
+       }else{
+        setSelectedRoundId(targetRound.toString())
+
+       }
+    } 
   }
 
   return (
     <StyledCard>
       <StyledCardHeader>
         <RoundSwitcher
-          isLoading={isLoading}
+          isLoading={false}
           selectedRoundId={selectedRoundId}
           mostRecentRound={latestRoundId}
           handleInputChange={handleInputChange}
           handleArrowButtonPress={handleArrowButtonPress}
         />
-        <Box mt="8px">
+        {/* <Box mt="8px">
           {selectedLotteryNodeData?.endTime ? (
             <Text fontSize="14px">
               {t('Drawn')} {getDrawnDate(selectedLotteryNodeData.endTime)}
@@ -113,10 +155,10 @@ const AllHistoryCard = () => {
           ) : (
             <Skeleton width="185px" height="21px" />
           )}
-        </Box>
+        </Box> */}
       </StyledCardHeader>
       <PreviousRoundCardBody lotteryNodeData={selectedLotteryNodeData} lotteryId={selectedRoundId} />
-      <PreviousRoundCardFooter lotteryNodeData={selectedLotteryNodeData} lotteryId={selectedRoundId} />
+      {/* <PreviousRoundCardFooter lotteryNodeData={selectedLotteryNodeData} lotteryId={selectedRoundId} /> */}
     </StyledCard>
   )
 }

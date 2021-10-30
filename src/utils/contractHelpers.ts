@@ -113,6 +113,7 @@ export const getBunnySpecialContract = (signer?: ethers.Signer | ethers.provider
   return getContract(bunnySpecialAbi, getBunnySpecialAddress(), signer)
 }
 export const getLotteryV2Contract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  console.log("getLotteryV2Address",getLotteryV2Address())
   return getContract(lotteryV2Abi, getLotteryV2Address(), signer)
 }
 export const getMasterchefContract = (signer?: ethers.Signer | ethers.providers.Provider) => {

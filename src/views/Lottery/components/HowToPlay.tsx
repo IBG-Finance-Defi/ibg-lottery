@@ -224,12 +224,12 @@ const HowToPlay: React.FC = () => {
     {
       label: t('Step %number%', { number: 1 }),
       title: t('Buy Tickets'),
-      subtitle: t('Buy a standard lottery ticket for 5 iBGs. Enjoy discount with bulk purchase. (Superstakers can claim 1 fee ticket for every 1000 iBG tokens superstaked) '),
+      subtitle: t('Buy a standard lottery ticket for 5 iBGs. Enjoy discount with bulk purchase. (Superstakers can claim 1 free ticket for every 1000 iBG tokens superstaked) '),
     },
     {
       label: t('Step %number%', { number: 2 }),
       title: t('Wait for the Draw'),
-      subtitle: t('There will be one drawndown every sunday 7pm GMT +B (10th, 17th, 24th & 31st October)'),
+      subtitle: t('There will be one drawndown every sunday 7pm GMT +B'),
     },
     {
       label: t('Step %number%', { number: 3 }),
@@ -255,8 +255,8 @@ const HowToPlay: React.FC = () => {
             {t('The digits on your ticket must match in the correct order to win.')}
           </Heading> */}
           <Text mb="6px" >
-            {t('There is an exclusive lottery for october 2021(on BSC only)')}
-          </Text>
+          This is an exclusive lottery for BSC only.
+                    </Text>
           {/* <BulletList>
             <li>
               <Text display="inline" color="textSubtle">
@@ -278,26 +278,24 @@ background: linear-gradient(to bottom, #7E41D6, #59179E);ine" color="textSubtle"
           </BulletList> */}
           <Text mt="16px"  >
             
-            <span style={{color:"red"}}>4 Draws</span>  Lottery cycle starts every sunday at 7pm.
+             Lottery cycle starts every Sunday at 7pm.
             
           </Text>
           <Text mt="16px" >
-          <span style={{color:"red"}}>2 Winners</span> The drawndown of winners will be every Sunday 7pm GMT+E (10th 17th 24th & 31st Oct)
+          <span style={{color:"red"}}>2 Winners</span> The drawndown of winners will be every Sunday 7pm GMT+8
             
           </Text>
           <Text mt="16px" >
            
-          <span style={{color:"red"}}>10 000 iBG Prize.</span> Each Winner randomly picked via smart contract logic will win 5K each
+          <span style={{color:"red"}}>10,000 iBG Prize.</span> Each winner randomly picked via smart contract logic and will win 5,000 iBG each
            
           </Text>
           <Text mt="16px" >
-            {t(
-              'The lottery is fully manged by a smart contract that allows anyone check the address.'
-            )}
+          The lottery is fully managed by a smart contract that allows anyone check to the address.
           </Text>
           <Text mt="16px" >
             {t(
-              '100% of subscription proceeds burned(no fees to the company nor the developer) '
+              '100% of subscription proceeds burned (no fees to the company nor the developer) '
             )}
           </Text>
         </Flex>

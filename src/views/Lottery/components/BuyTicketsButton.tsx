@@ -17,6 +17,9 @@ const BuyTicketsButton: React.FC<BuyTicketsButtonProps> = ({ disabled, ...props 
   } = useLottery()
 
   const getBuyButtonText = () => {
+    console.log("dsdsdsds",status)
+    return t('Buy')
+
     if (status === LotteryStatus.OPEN) {
       return t('Buy')
     }

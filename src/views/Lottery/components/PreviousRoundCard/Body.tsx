@@ -25,8 +25,6 @@ const StyledCardBody = styled(CardBody)`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  
 `
 const Grid = styled.div`
   display: grid;
@@ -50,32 +48,26 @@ const StyledCardRibbon = styled(CardRibbon)`
   }
 `
 const W1 = styled(Heading)`
-
-  
   ${({ theme }) => theme.mediaQueries.sm} {
-   
   }
 `
 const W2 = styled(Heading)`
- margin: 0rem;
+  margin: 0rem;
   ${({ theme }) => theme.mediaQueries.sm} {
-   
   }
 `
 
 const Mobile = styled.div`
   display: block;
   ${({ theme }) => theme.mediaQueries.sm} {
-   display: none;
+    display: none;
   }
-
 `
 const PC = styled.div`
   display: none;
   ${({ theme }) => theme.mediaQueries.sm} {
-   display: block;
+    display: block;
   }
-
 `
 const Flexu = styled(Flex)`
   flex-direction: column;
@@ -87,11 +79,10 @@ const Flexu = styled(Flex)`
     justify-content: space-around;
     height: 10rem;
     margin-top: 3rem;
-   }
+  }
 `
 
-
-const PreviousRoundCardBody: React.FC<{ lotteryNodeData: LotteryRound; lotteryId: string }> = ({
+const PreviousRoundCardBody: React.FC<{ lotteryNodeData: any; lotteryId: string }> = ({
   lotteryNodeData,
   lotteryId,
 }) => {
@@ -122,19 +113,87 @@ const PreviousRoundCardBody: React.FC<{ lotteryNodeData: LotteryRound; lotteryId
   const [youHadText, ticketsThisRoundText] = ticketRoundText.split(totalTicketNumber.toString())
 
   return (
-    <StyledCardBody >
+    <StyledCardBody>
       {isLatestRound && <StyledCardRibbon text={t('Latest')} />}
-      <Flexu flexDirection="column" >
-        <PC><W1  mb="24px">{t('Winner_#1')}</W1></PC><Mobile><W1  mb="24px">{t('#1')}</W1></Mobile>
-        <PC><W2  mb="24px">{t('Winner_#2')}</W2></PC><Mobile><W1  mb="24px">{t('#2')}</W1></Mobile>
+      <Flexu flexDirection="column">
+        <PC>
+          <W1 mb="10px">
+            {t('Winner_#1')} {lotteryNodeData?.firstWinner}
+          </W1>
+        </PC>
+        <Mobile>
+          <W1 mb="10px">
+            {t('#1')} {lotteryNodeData?.firstWinner}
+          </W1>
+        </Mobile>
+        <PC>
+          <W2 mb="10px">
+            {t('Winner_#2')} {lotteryNodeData?.secondWinner}
+          </W2>
+        </PC>
+        <Mobile>
+          <W1 mb="10px">
+            {t('#2')}
+            {lotteryNodeData?.secondWinner}{' '}
+          </W1>
+        </Mobile>
+
+
+
+        <PC>
+          <W2 mb="10px" color="red">
+           Total Participants {lotteryNodeData?.numOfParticipants}
+          </W2>
+        </PC>
+        <Mobile>
+          <W1 mb="10px">
+          Total Participants {lotteryNodeData?.numOfParticipants}
+
+          </W1>
+        </Mobile>
+
+
+
+        <PC>
+          <W2 mb="10px" color="red">
+           Total Sales {lotteryNodeData?.sales}
+          </W2>
+        </PC>
+        <Mobile>
+          <W1 mb="10px">
+          Total Sales {lotteryNodeData?.sales}
+
+          </W1>
+        </Mobile>
+
+
+
+        <PC>
+          <W2 mb="10px" color="red">
+           Total Tickets {lotteryNodeData?.totalTickets}
+          </W2>
+        </PC>
+        <Mobile>
+          <W1 mb="10px">
+          Total Tickets {lotteryNodeData?.totalTickets}
+
+          </W1>
+        </Mobile>
+
+
+
+      
       </Flexu>
       <Grid>
         {/* <Flex justifyContent={['center', null, null, 'flex-start']}> */}
-          
+
         {/* </Flex> */}
-        <Flex  maxWidth={['240px', null, null, '100%']} justifyContent={['center', null, null, 'flex-start']}>
-          
-          {lotteryNodeData ? (
+        <Flex maxWidth={['240px', null, null, '100%']} >
+          {/*           
+        <PC><W1  mb="24px">{t('Winner_#1')} {lotteryNodeData?.firstWinner}</W1></PC><Mobile><W1  mb="24px">{t('#1')} {lotteryNodeData?.firstWinner}</W1></Mobile>
+        <PC><W2  mb="24px">{t('Winner_#2')} {lotteryNodeData?.secondWinner}</W2></PC><Mobile><W1  mb="24px">{t('#2')}{lotteryNodeData?.secondWinner} </W1></Mobile> */}
+
+          {/* {lotteryNodeData ? (
             <div>
               <Heading style={{textAlign:"center"}} mb="24px">{t('Winners')}</Heading>
               <WinningNumbers
@@ -160,38 +219,8 @@ const PreviousRoundCardBody: React.FC<{ lotteryNodeData: LotteryRound; lotteryId
               height={['34px', null, null, '71px']}
               mr={[null, null, null, '32px']}
             />
-          )}
+          )} */}
         </Flex>
-        {userDataForRound && (
-          <>
-            <Box display={['none', null, null, 'flex']}>
-              <Heading>{t('Your tickets')}</Heading>
-            </Box>
-            <Flex
-              flexDirection="column"
-              mr={[null, null, null, '24px']}
-              alignItems={['center', null, null, 'flex-start']}
-            >
-              <Box mt={['32px', null, null, 0]}>
-                <Text display="inline">{youHadText} </Text>
-                <Text display="inline" bold>
-                  {userDataForRound.totalTickets}
-                </Text>
-                <Text display="inline">{ticketsThisRoundText}</Text>
-              </Box>
-              <Button
-                onClick={onPresentViewTicketsModal}
-                height="auto"
-                width="fit-content"
-                p="0"
-                variant="text"
-                scale="sm"
-              >
-                {t('View your tickets')}
-              </Button>
-            </Flex>
-          </>
-        )}
       </Grid>
     </StyledCardBody>
   )

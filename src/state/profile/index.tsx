@@ -187,8 +187,8 @@ export const { profileFetchStart, profileFetchSucceeded, profileFetchFailed, pro
 export const fetchProfile = (address: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(profileFetchStart())
-    const response = await getProfile(address)
-    dispatch(profileFetchSucceeded(response))
+    // const response = await getProfile(address)
+    // dispatch(profileFetchSucceeded(response))
   } catch (e) {
     console.error(e)
     dispatch(profileFetchFailed())

@@ -31,6 +31,7 @@
   "dependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
     "@ethersproject/experimental": "^5.0.1",
+    "@pancakeswap-libs/uikit": "https://github.com/IBG-Finance-Defi/IBG-UI-Kit",
     "@pancakeswap/sdk": "^2.4.0",
     "@pancakeswap/uikit": "^0.55.0",
     "@reduxjs/toolkit": "^1.5.0",
@@ -64,6 +65,7 @@
     "multihashes": "^3.0.1",
     "node-fetch": "^2.6.1",
     "numeral": "^2.0.6",
+    "pancake-toolkit": "IBG-Finance-Defi/ibg-lottery-uikit",
     "qs": "^6.9.4",
     "react": "^17.0.1",
     "react-countup": "^4.3.3",

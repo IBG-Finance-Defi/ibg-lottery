@@ -23,11 +23,11 @@ const Menu = (props) => {
   return (
     <UikitMenu
       userMenu={<UserMenu />}
-      globalMenu={<GlobalSettings />}
+      // globalMenu={<GlobalSettings />}
       isDark={isDark}
       toggleTheme={toggleTheme}
       currentLang={currentLanguage.code}
-      langs={languageList}
+      langs={[]}
       setLang={setLanguage}
       cakePriceUsd={cakePriceUsd.toNumber()}
       links={config(t)}
@@ -35,7 +35,7 @@ const Menu = (props) => {
       footerLinks={footerLinks(t)}
       activeItem={activeMenuItem?.href}
       activeSubItem={activeSubMenuItem?.href}
-      buyCakeLabel={t('Buy ZNA')}
+      buyCakeLabel="Buy iBG"
       {...props}
     />
   )

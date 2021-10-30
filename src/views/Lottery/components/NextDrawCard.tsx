@@ -1,11 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import styled from 'styled-components'
+import BigNumber from 'bignumber.js'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { getLotteryV2Address } from 'utils/addressHelpers'
+import { ethers } from 'ethers'
+import { BIG_ZERO, ethersToBigNumber } from 'utils/bigNumber'
+import useAuth from 'hooks/useAuth'
+
 import {
   Card,
   CardHeader,
   CardBody,
   Flex,
   Heading,
+  useWalletModal,
   Text,
   Skeleton,
   Button,
@@ -14,6 +22,8 @@ import {
   CardFooter,
   ExpandableLabel,
 } from '@pancakeswap/uikit'
+import { useCake, useLotteryV2Contract ,useERC20} from 'hooks/useContract'
+
 import { useWeb3React } from '@web3-react/core'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
@@ -82,67 +92,68 @@ const NextDrawWrapper = styled.div`
 `
 
 const H = styled.h2`
-    color: #000080;
-    font-weight:550;
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    @media only screen and (max-width: 600px) {
-        font-weight: bold;
-        font-size: 1.2rem;
-        text-align: center;
-      }
-`;
+  color: #000080;
+  font-weight: 550;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  @media only screen and (max-width: 600px) {
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+`
 
 const T = styled.p`
-    color: #000080;
+  color: #000080;
+  font-weight: regular;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  @media only screen and (max-width: 600px) {
     font-weight: regular;
     font-size: 1rem;
-    margin-bottom: 0.8rem;
-    @media only screen and (max-width: 600px) {
-        font-weight: regular;
-        font-size: 1rem;
-    }
-`;
+  }
+`
 
 const Left = styled.div`
-     display: grid;
-      place-items: center;
-     @media only screen and (max-width: 600px) {
-        
-     }
-`;
+  display: grid;
+  place-items: center;
+  @media only screen and (max-width: 600px) {
+  }
+`
 
 const Right = styled.div`
-      display: grid;
-      place-items: center;
-      @media only screen and (max-width: 600px) {
-        margin-top: 1.5rem;
-      }
-`;
+  display: grid;
+  place-items: center;
+  @media only screen and (max-width: 600px) {
+    margin-top: 1.5rem;
+  }
+`
 
 const Flexx = styled(Flex)`
-      width: 100%;
-      align-items: center;
-      justify-content: space-around;
-      background-color: rgb(248, 239, 242);
-      border-radius: .5rem;
-      padding: 1rem ;
-      flex-direction: column;
-    ${({ theme }) => theme.mediaQueries.sm} {
-      flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+  background-color: rgb(248, 239, 242);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    flex-direction: row;
   }
-`;
+`
 
 const Foot = styled(CardFooter)`
   display: grid;
   place-items: center;
-  padding: 1rem ;
+  padding: 1rem;
 `
 
-const NextDrawCard = () => {
-  const { t } = useTranslation()
+const NextDrawCard = (props) => {
   const { account } = useWeb3React()
   const { currentLotteryId, isTransitioning, currentRound } = useLottery()
+
+  const lotteryContract = useLotteryV2Contract()
+
   const { endTime, amountCollectedInCake, userTickets, status } = currentRound
 
   const [onPresentViewTicketsModal] = useModal(<ViewTicketsModal roundId={currentLotteryId} roundStatus={status} />)
@@ -155,6 +166,17 @@ const NextDrawCard = () => {
   const endDate = new Date(endTimeMs)
   const isLotteryOpen = status === LotteryStatus.OPEN
   const userTicketCount = userTickets?.tickets?.length || 0
+  const [myTicketsInCurrentRound, setMyTicketsInCurrentRound] = useState(0)
+
+  const [totalParticipants, setTotalParticipants] = useState(0)
+  const [ticketsSold, setTicketsSold] = useState(0)
+  const [totalSales, setTotalSales] = useState(0)
+  const [eligibleForFeeTicket, setEligibleForFeeTicket] = useState(false)
+  const { callWithGasPrice } = useCallWithGasPrice()
+  const [isApprovalRequired,setApprovalRequired] = useState(true)
+  const tokenContract = useERC20("0x5c46c55a699a6359e451b2c99344138420c87261");
+  const { t } = useTranslation()
+
 
   const getPrizeBalances = () => {
     if (status === LotteryStatus.CLOSE || status === LotteryStatus.CLAIMABLE) {
@@ -196,6 +218,64 @@ const NextDrawCard = () => {
     )
   }
 
+  const claimTicket = async () => {
+    return callWithGasPrice(lotteryContract, 'claimTicket', [])
+
+    // await lotteryContract.claimTicket()
+  }
+
+  const { login, logout } = useAuth()
+
+  const handleTicketBuy = async (numberOfTickets) => {
+    return callWithGasPrice(lotteryContract, 'purchaseTicket', [numberOfTickets])
+
+    // await lotteryContract.claimTicket()
+  }
+
+  const { onPresentConnectModal } = useWalletModal(login, logout, t)
+
+  const handleApproval = async()=>{
+
+    return callWithGasPrice(tokenContract, 'approve', [getLotteryV2Address(), ethers.constants.MaxUint256])
+  }
+  const renderBuyOfApprovalButton = (noOfTickets)=>{
+
+    
+    if(!account){
+      return <Button
+      maxWidth="280px"
+      onClick={() => {
+        onPresentConnectModal()
+      }}
+      style={{ background: 'red', marginTop: '0.5rem' }}
+    >
+      Connect Wallet
+    </Button>
+    }
+    if(isApprovalRequired){
+      return <Button
+      maxWidth="280px"
+      onClick={() => {
+        handleApproval()
+      }}
+      style={{ background: 'red', marginTop: '0.5rem' }}
+    >
+      Approve Contract
+    </Button>
+    }
+    return  <Button
+    maxWidth="280px"
+    onClick={() => {
+      handleTicketBuy(noOfTickets)
+    }}
+    style={{ background: 'red', marginTop: '0.5rem' }}
+  >
+    Buy
+  </Button>
+  }
+
+
+
   const getNextDrawId = () => {
     if (status === LotteryStatus.OPEN) {
       return `${currentLotteryId} |`
@@ -217,11 +297,93 @@ const NextDrawCard = () => {
     userTicketCount > 1
       ? t('You have %amount% tickets this round', { amount: userTicketCount })
       : t('You have %amount% ticket this round', { amount: userTicketCount })
+
   const [youHaveText, ticketsThisRoundText] = ticketRoundText.split(userTicketCount.toString())
+
+  const loadContractData = useCallback(async () => {
+    if (!lotteryContract || !tokenContract) {
+      return
+    }
+
+
+    let _currentRound =await lotteryContract.getCurrentRound();
+    _currentRound = _currentRound.toNumber()
+
+
+    
+
+    const currentStats = await lotteryContract.getStats(_currentRound)
+
+    setTicketsSold(currentStats._numTotalTickets.toNumber())
+    setTotalParticipants(currentStats._numParticipants.toNumber())
+    
+    setTotalSales(getBalanceNumber(new BigNumber(currentStats._sales._hex)))
+
+    if (account) {
+      const _isEliglibleForFreeTickets = await lotteryContract.isEligibleForFeeTickets(account)
+      setEligibleForFeeTicket(_isEliglibleForFreeTickets)
+      const approval = (await tokenContract.allowance(account,getLotteryV2Address()))
+
+      const currentAllowance = ethersToBigNumber(approval)
+
+
+
+
+
+      const myTicketsInThisRound = await lotteryContract.numTicketsOf(_currentRound,account)
+
+      console.log("myTicketsInThisRound",myTicketsInThisRound)
+      setMyTicketsInCurrentRound(new BigNumber(myTicketsInThisRound._hex).toNumber())
+     
+     
+      setApprovalRequired(!currentAllowance.gt(0));
+
+    }
+
+
+
+    if((_currentRound-1)> 0){
+      const previousRounds = []
+      /* eslint-disable no-await-in-loop */
+     
+      for(let i = _currentRound-1;i>= _currentRound-3;i--){
+        const stats = await lotteryContract.getStats(i);
+        const preTotalTickets = stats._numTotalTickets.toNumber();
+        const preSales = getBalanceNumber(new BigNumber(stats._sales._hex))
+        const preNumOfParticipants = stats._numParticipants.toNumber();
+        const pre1stWinner = stats._firstWinner
+        const pre2ndWinner = stats._secondWinner
+
+        previousRounds.push({
+          roundNumber:i,
+          totalTickets:preTotalTickets,
+          sales:preSales,
+          numOfParticipants:preNumOfParticipants,
+          firstWinner:pre1stWinner,
+          secondWinner:pre2ndWinner
+        })
+      }
+
+      props.onPreviousRounds(previousRounds);
+    }
+
+
+  }, [lotteryContract, account,tokenContract,props])
+
+  useEffect(() => {
+    if (lotteryContract) {
+      // setInterval(()=>{
+      //   loadContractData()
+      // },5000)
+      loadContractData()
+
+    }
+
+  }, [lotteryContract, loadContractData])
 
   return (
     <StyledCard>
-      <CardHeader p="16px 24px" style={{ background: "#f8eff2" }}>
+      <CardHeader p="16px 24px" style={{ background: '#f8eff2' }}>
         <Flex justifyContent="space-between">
           <Heading mr="12px">{t('Next Draw')}</Heading>
           <Text>
@@ -282,88 +444,94 @@ const NextDrawCard = () => {
         <Flexx>
           <Left>
             <H>Prizes</H>
-            <Flex><T>Winner 1:</T><T style={{marginLeft:"1rem"}} >5000 iBG</T></Flex>
-            <Flex><T>Winner 2:</T><T style={{marginLeft:"0.8rem"}}>5000 iBG</T></Flex>
+            <Flex>
+              <T>Winner 1:</T>
+              <T style={{ marginLeft: '1rem' }}>25000 iBG</T>
+            </Flex>
+            <Flex>
+              <T>Winner 2:</T>
+              <T style={{ marginLeft: '0.8rem' }}>25000 iBG</T>
+            </Flex>
           </Left>
           <Right>
             <H>Current Lottery Information</H>
-            <Flex><T>Ticket Solds:</T><T>5000 Tickets</T></Flex>
-            <Flex><T>Sales proceeds:</T><T>200 Sales</T></Flex>
-            <Flex><T style={{textAlign:"center"}}>Number of Participents 50000 Participants</T></Flex>
+            <Flex>
+              <T>Ticket Solds:</T>
+              <T style={{marginLeft:2}}>{ticketsSold} Tickets</T>
+            </Flex> 
+            <Flex>
+              <T>Sales proceeds: </T>
+              <T style={{marginLeft:2}}>{totalSales} IBG</T>
+            </Flex>
+            <Flex>
+              <T style={{ textAlign: 'center' }}>Number of Participants: {totalParticipants} Participants</T>
+            </Flex>
+
+
+            <Flex>
+              <T style={{ textAlign: 'center' }}>My Tickets in this Round: {myTicketsInCurrentRound} Tickets</T>
+            </Flex>
+
+            
           </Right>
         </Flexx>
 
-
         <StepContainer>
-          <Card style={{ minWidth: "250px" }}>
-            <CardHeader style={{ background: "red", color: "white", textAlign: "center",fontWeight:"bold" }}>
+          <Card style={{ minWidth: '250px' }}>
+            <CardHeader style={{ background: 'red', color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
               Buy 1 Ticket
             </CardHeader>
-            <CardBody style={{ textAlign: "center", background:"rgb(248, 239, 242)" }}>
-              <Text>
-                5 IBG
-              </Text>
-              <BuyTicketsButton disabled={ticketBuyIsDisabled} maxWidth="280px" />
+            <CardBody style={{ textAlign: 'center', background: 'rgb(248, 239, 242)' }}>
+              <Text>5 IBG</Text>
+
+              {renderBuyOfApprovalButton(1)}
+            </CardBody>
+          </Card>
+
+          <Card style={{ minWidth: '250px' }}>
+            <CardHeader style={{ background: 'red', color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+              Buy 10 Tickets
+            </CardHeader>
+            <CardBody style={{ textAlign: 'center', background: 'rgb(248, 239, 242)' }}>
+              <Text>47.5 IBG</Text>
+              {renderBuyOfApprovalButton(10)}
 
             </CardBody>
           </Card>
 
-          <Card style={{ minWidth: "250px" }}>
-            <CardHeader style={{ background: "red", color: "white", textAlign: "center",fontWeight:"bold" }}>
-              Buy 10 Ticket
+          <Card style={{ minWidth: '250px' }}>
+            <CardHeader style={{ background: 'red', color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+              Buy 100 Tickets
             </CardHeader>
-            <CardBody style={{ textAlign: "center" , background:"rgb(248, 239, 242)"}}>
-              <Text>
-                45 IBG
-              </Text>
-              <BuyTicketsButton disabled={ticketBuyIsDisabled} maxWidth="280px" />
+            <CardBody style={{ textAlign: 'center', background: 'rgb(248, 239, 242)' }}>
+              <Text>450 IBG</Text>
+              {renderBuyOfApprovalButton(100)}
 
             </CardBody>
           </Card>
-
-          <Card style={{ minWidth: "250px" }}>
-            <CardHeader style={{ background: "red", color: "white", textAlign: "center" ,fontWeight:"bold"}}>
-              Buy 100 Ticket
+          <Card style={{ minWidth: '250px' }}>
+            <CardHeader style={{ background: 'red', color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+              Buy 1000 Tickets
             </CardHeader>
-            <CardBody style={{ textAlign: "center", background:"rgb(248, 239, 242)" }}>
-              <Text>
-                400 IBG
-              </Text>
-              <BuyTicketsButton disabled={ticketBuyIsDisabled} maxWidth="280px" />
-
-            </CardBody>
-          </Card>
-          <Card style={{ minWidth: "250px" }}>
-            <CardHeader style={{ background: "red", color: "white", textAlign: "center",fontWeight:"bold" }}>
-              Buy 1000 Ticket
-            </CardHeader>
-            <CardBody style={{ textAlign: "center", background:"rgb(248, 239, 242)" }}>
-              <Text>
-                4000 IBG
-              </Text>
-              <BuyTicketsButton disabled={ticketBuyIsDisabled} maxWidth="280px" />
+            <CardBody style={{ textAlign: 'center', background: 'rgb(248, 239, 242)' }}>
+              <Text>4000 IBG</Text>
+              {renderBuyOfApprovalButton(1000)}
 
             </CardBody>
           </Card>
         </StepContainer>
-
       </CardBody>
       <Foot p="0">
-
-        <Text>Clain free ticket only for supertakers, 1 ticket per 1,000 iBG staked in the super taking pools</Text>
-        <Button style={{marginTop:"0.5rem"}}>Claim</Button>
-        {/* {isExpanded && (
-          <NextDrawWrapper>
-            <RewardBrackets lotteryNodeData={currentRound} />
-          </NextDrawWrapper>
-        )}
-        {(status === LotteryStatus.OPEN || status === LotteryStatus.CLOSE) && (
-          <Flex p="8px 24px" alignItems="center" justifyContent="center">
-            <ExpandableLabel expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)}>
-              {isExpanded ? t('Hide') : t('Details')}
-            </ExpandableLabel>
-          </Flex>
-        )} */}
+        <Text>Claim free ticket only for SuperStakers, 1 ticket per 1,000 iBG staked in the SuperStaking pools</Text>
+        <Button
+          style={{ marginTop: '0.5rem' }}
+          disabled={!eligibleForFeeTicket}
+          onClick={() => {
+            claimTicket()
+          }}
+        >
+          {eligibleForFeeTicket ? 'Claim' : 'No Free Tickets Available'}
+        </Button>
       </Foot>
     </StyledCard>
   )

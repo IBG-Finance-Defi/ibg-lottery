@@ -30,20 +30,21 @@ export const PageMeta: React.FC<{ symbol?: string }> = ({ symbol }) => {
   const cakePriceUsdDisplay = cakePriceUsd ? `$${cakePriceUsd.toFixed(3)}` : '...'
 
   const pageMeta = getCustomMeta(pathname, t) || {}
-  const { title, description, image } = { ...DEFAULT_META, ...pageMeta }
-  let pageTitle = cakePriceUsdDisplay ? [title, cakePriceUsdDisplay].join(' - ') : title
-  if (symbol) {
-    pageTitle = [symbol, title].join(' - ')
-  }
+  // const { title, description, image } = { ...DEFAULT_META, ...pageMeta }
+  // let pageTitle = cakePriceUsdDisplay ? [title, cakePriceUsdDisplay].join(' - ') : title
+  // if (symbol) {
+  //   pageTitle = [symbol, title].join(' - ')
+  // }
 
-  return (
-    <Helmet>
-      <title>{pageTitle}</title>
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-    </Helmet>
-  )
+  // return (
+  //   <Helmet>
+  //     <title>{pageTitle}</title>
+  //     <meta property="og:title" content={title} />
+  //     <meta property="og:description" content={description} />
+  //     <meta property="og:image" content={image} />
+  //   </Helmet>
+  // )
+  return null
 }
 
 interface PageProps extends React.HTMLAttributes<HTMLDivElement> {

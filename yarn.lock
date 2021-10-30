@@ -2622,6 +2622,16 @@
     truffle-flattener "^1.4.4"
     truffle-hdwallet-provider "^1.0.17"
 
+"@pancakeswap-libs/uikit@https://github.com/IBG-Finance-Defi/IBG-UI-Kit":
+  version "0.10.2"
+  resolved "https://github.com/IBG-Finance-Defi/IBG-UI-Kit#3a4b2fa3bbb660ee721b178c51ba141b4dfd9b43"
+  dependencies:
+    "@types/lodash" "^4.14.162"
+    "@types/styled-system" "^5.1.10"
+    lodash "^4.17.20"
+    react-transition-group "^4.4.1"
+    styled-system "^5.1.5"
+
 "@pancakeswap/eslint-config-pancake@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@pancakeswap/eslint-config-pancake/-/eslint-config-pancake-1.1.0.tgz#ddb916af3726359095207306cfc87098cec43f41"
@@ -3820,6 +3830,11 @@
     "@types/keygrip" "*"
     "@types/koa-compose" "*"
     "@types/node" "*"
+
+"@types/lodash@^4.14.162":
+  version "4.14.176"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.176.tgz#641150fc1cda36fbfa329de603bbb175d7ee20c0"
+  integrity sha512-xZmuPTa3rlZoIbtDUyJKZQimJV3bxCmzMIO2c9Pz9afyDro6kr7R79GwcB6mRhuoPmV2p1Vb66WOJH7F886WKQ==
 
 "@types/lodash@^4.14.168":
   version "4.14.171"
@@ -15857,6 +15872,10 @@ pako@~1.0.5:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
   integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
+
+pancake-toolkit@IBG-Finance-Defi/ibg-lottery-uikit:
+  version "1.0.0"
+  resolved "https://codeload.github.com/IBG-Finance-Defi/ibg-lottery-uikit/tar.gz/fc81159d24a5d26e3178e35aaac077f80b5b711e"
 
 parallel-transform@^1.1.0:
   version "1.2.0"
